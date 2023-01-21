@@ -49,6 +49,12 @@ def change_slide_handler(db: Session, google_uid:str, slide_id: str, code: str, 
   return slide
 
 
+def get_slides_handler(db: Session, google_uid: str) -> list[Slide]:
+  slides_orm = db.query(models.Slides).filter(models.Slides.google_uid == google_uid).all()
+
+  slides = list(map(Slide.from_orm, slides_orm))
+  return slides
+
 def get_slide_handler(db: Session, google_uid: str, slide_id: str) -> Slide:
   slide_orm = db.query(models.Slides).filter(models.Slides.google_uid == google_uid).filter(models.Slides.id == slide_id).first()
   if slide_orm is None:
@@ -67,7 +73,6 @@ def delete_slide_handler(db: Session, google_uid: str, slide_id: str) -> DeleteS
 
   if share_orm != None:
     db.delete(share_orm)
-    db.commit()
 
   slide_orm = db.query(models.Slides).filter(models.Slides.google_uid == google_uid).filter(models.Slides.id == slide_id).first()
 

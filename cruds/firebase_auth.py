@@ -9,6 +9,14 @@ from db import get_db
 # from fastapi.security import OAuth2PasswordBearer
 from schemas.user import UserId
 
+import firebase_admin
+from firebase_admin import auth
+from firebase_admin import credentials
+
+
+cred = credentials.Certificate("serviceAccountKey.json")
+firebase_admin.initialize_app(cred)
+
 oauth2_scheme = HTTPBearer()
 
 class GetCurrentUser:
@@ -21,13 +29,17 @@ class GetCurrentUser:
             detail='Colud not validate credentials',
             headers={'WWW-Authenticate': "Bearer"}
         )
-        # try:
 
-        # except JWTError:
-        #     raise credentials_exception
-        
-        # user = db_user.get_user_by_username(db, username)
-        user_id: UserId = UserId(google_uid="hoge")
+        firebase_user = ''
+        try:
+            firebase_user = auth.verify_id_token(token.credentials)
+
+        except Exception as e:
+            print(e)
+            raise credentials_exception
+
+        user_id: UserId = UserId(google_uid=firebase_user['user_id'])
         # if user is None:
         #     raise credentials_exception
+        print(user_id)
         return user_id

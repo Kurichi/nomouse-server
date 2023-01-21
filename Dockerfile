@@ -12,12 +12,8 @@ RUN apk add --no-cache postgresql-libs && \
 
 ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
 RUN pip install --upgrade pip
-# RUN pip install pipenv
-# RUN pip install cryptography
-COPY ./requirements.txt .
+
+COPY . .
 RUN pip install -r requirements.txt
-
-# COPY ./Pipfile .
-# COPY ./Pipfile.lock .
-
-# RUN pipenv install
+EXPOSE 80
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]

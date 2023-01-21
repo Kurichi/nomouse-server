@@ -38,7 +38,8 @@ class Slides(Base):
     id = Column(String(length=255), primary_key=True, default=generate_uuid)
     google_uid = Column(String(length=255), ForeignKey('users.google_uid'))
     code = Column(Text())
-    compiled_data = Column(JSON())
+    compiled_data = Column(Text())
+    thumbnail = Column(String(length=255))
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 

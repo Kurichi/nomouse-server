@@ -30,10 +30,8 @@ def create_user_handler(db: Session, google_uid:str) -> UserId:
 def get_user_handler(db: Session, google_uid: str) -> UserId:
   user_orm = db.query(models.Users).filter(models.Users.google_uid == google_uid).first()
   if user_orm is None:
-    raise HTTPException(
-      status_code=404,
-      detail="The user specified by id is not exist"
-    )
+
+    return create_user_handler(db=db, google_uid=google_uid)
   user = UserId.from_orm(user_orm)
   return user
 

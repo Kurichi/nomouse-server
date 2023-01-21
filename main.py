@@ -7,7 +7,6 @@ from db.models import Base
 from fastapi.staticfiles import StaticFiles
 import os
 
-Base.metadata.create_all(engine)
 app = FastAPI(
     title='markup-slide'
 )

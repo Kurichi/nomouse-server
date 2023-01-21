@@ -24,28 +24,28 @@ class Base:
     def __tablename__(self) -> str:
         return self.__name__.lower()
 
-# class Users(Base):
+class Users(Base):
 
-#     __tablename__ = "users"
+    __tablename__ = "users"
 
-#     google_uid = Column(String(length=255), primary_key=True)
+    google_uid = Column(String(length=255), primary_key=True)
 
 
-# class Slides(Base):
+class Slides(Base):
 
-#     __tablename__ = "slides"
+    __tablename__ = "slides"
 
-#     id = Column(String(length=255), primary_key=True, default=generate_uuid)
-#     google_uid = Column(String(length=255), ForeignKey('users.google_uid'))
-#     code = Column(Text())
-#     compiled_data = Column(JSON())
-#     created_at = Column(DateTime, default=func.now())
-#     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+    id = Column(String(length=255), primary_key=True, default=generate_uuid)
+    google_uid = Column(String(length=255), ForeignKey('users.google_uid'))
+    code = Column(Text())
+    compiled_data = Column(JSON())
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
-# class ShareIds(Base):
+class ShareIds(Base):
 
-#     __tablename__ = "share_ids"
+    __tablename__ = "share_ids"
 
-#     slide_id = Column(String(length=255), ForeignKey('slides.id'), primary_key=True)
-#     share_id = Column(String(length=255), primary_key=True, default=generate_uuid)
+    slide_id = Column(String(length=255), ForeignKey('slides.id'), primary_key=True)
+    share_id = Column(String(length=255), primary_key=True, default=generate_uuid)
     

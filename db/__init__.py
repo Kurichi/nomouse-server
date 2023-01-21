@@ -1,6 +1,7 @@
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from time import sleep
 
 from .models import *
 import os
@@ -17,27 +18,20 @@ DATABASE_URL = "{}://{}:{}@{}/{}".format(DATABASE, USER, PASSWORD, HOST, DB_NAME
 
 ECHO_LOG = False
 
-# # Create database for test
-# def create_test_database():
-#     DATABASE_URL = "{}://{}:{}@{}".format(DATABASE, USER, PASSWORD, HOST)
-#     engine = sqlalchemy.create_engine(DATABASE_URL, echo=ECHO_LOG)
-#     session = Session(
-#         bind=engine,
-#         autocommit=True,
-#         autoflush=True
-#     )
-#     session.connection().connection.set_isolation_level(0)
-#     result = session.execute("SELECT datname from pg_database where datname='%s'" % 'toybox_test')
-#     if len(result.all()) == 0:
-#         session.execute("CREATE DATABASE %s;" % ('toybox_test'))
-#     session.connection().connection.set_isolation_level(1)
-#     session.close()
-
-# create_test_database()
-
 engine = sqlalchemy.create_engine(DATABASE_URL, echo=ECHO_LOG)
 
-Base.metadata.create_all(bind=engine)
+retry_interval = 2
+    # 試行回数
+tries = 4
+for i in range(0, tries):
+    try:
+        Base.metadata.create_all(bind=engine)
+        break
+    except sqlalchemy.exc.OperationalError as e:
+        if i + 1 == tries:
+            raise e
+        sleep(retry_interval)
+        continue
 
 SessionClass = sessionmaker(engine)
 

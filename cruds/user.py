@@ -14,7 +14,7 @@ def create_user_handler(db: Session, google_uid:str) -> UserId:
       status_code=400,
       detail="The tag is exist"
     )
-  
+
 
   user_orm = models.Users(
     google_uid=google_uid
@@ -44,13 +44,11 @@ def delete_user_handler(db: Session, google_uid: str) -> UserId:
   for slide in slide_orm:
     share_orm = db.query(models.ShareIds).filter(models.ShareIds.slide_id == slide.id).first()
 
-    if user_orm != None:
+    if share_orm != None:
       db.delete(share_orm)
-      db.commit()
 
-    if user_orm != None:
+    if slide_orm != None:
       db.delete(slide_orm)
-      db.commit()
 
   user_orm = db.query(models.Users).filter(models.Users.google_uid == google_uid).first()
   if user_orm == None:
@@ -58,7 +56,7 @@ def delete_user_handler(db: Session, google_uid: str) -> UserId:
       status_code=400,
       detail="The user is not exist"
     )
-  
+
   db.delete(user_orm)
   db.commit()
 

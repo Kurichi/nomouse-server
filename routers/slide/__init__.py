@@ -2,7 +2,7 @@ from sqlalchemy.orm.session import Session
 from db import get_db
 from fastapi import APIRouter
 from fastapi.params import Depends
-from cruds.slide import get_slide_handler, create_slide_handler, change_slide_handler, delete_slide_handler
+from cruds.slide import get_slide_handler, create_slide_handler, change_slide_handler, delete_slide_handler, get_slides_handler
 from cruds.firebase_auth import GetCurrentUser
 from schemas.slide import Slide, PostSlide, PutSlide
 from schemas.user import UserId
@@ -10,7 +10,12 @@ from schemas.util import DeleteStatus
 
 slides = APIRouter()
 
-@slides.get('/',response_model=Slide)
+@slides.get('/', response_model=list[Slide])
+async def get_all_slide(db: Session = Depends(get_db), user: UserId = Depends(GetCurrentUser())):
+  result = get_slides_handler(db, user.google_uid)
+  return result
+
+@slides.get('/{slide_id}',response_model=Slide)
 async def get_slide(slide_id: str = '', db: Session = Depends(get_db), user: UserId = Depends(GetCurrentUser())):
   result = get_slide_handler(db, user.google_uid, slide_id)
   return result

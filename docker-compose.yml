@@ -1,5 +1,14 @@
 version: "3.9"
 services:
+  proxy:
+    image: nginx:latest
+    ports:
+      - 80:80
+    valumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/logs:/var/log/nginx
+    restart: always
+
   db:
     image: postgres:13.3-alpine
     volumes:

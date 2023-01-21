@@ -11,6 +11,8 @@ app = FastAPI(
     title='markup-slide'
 )
 
+app.mount('/assets', StaticFiles(directory="assets"), name="static")
+
 
 origins = [
     "http://localhost:8080"

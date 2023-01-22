@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.params import Depends
 from fastapi.datastructures import UploadFile
 from fastapi.param_functions import Depends, File
+from pydantic import BaseModel
 from cruds.firebase_auth import GetCurrentUser
 from schemas.user import UserId
 from schemas.util import DeleteStatus
@@ -10,10 +11,13 @@ import shutil
 
 asset_router = APIRouter()
 
+class PostAssets(BaseModel):
+    file: str
+
 
 @asset_router.post("/", response_model=str)
 async def post_asset(
-    file: UploadFile = File(...),
+    payload: PostAssets,
     user: UserId = Depends(GetCurrentUser()),
 ):
     if file is None:

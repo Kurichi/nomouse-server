@@ -40,6 +40,7 @@ class Slides(Base):
     code = Column(Text())
     compiled_data = Column(Text())
     thumbnail = Column(String(length=255))
+    title = Column(String(length=255))
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 

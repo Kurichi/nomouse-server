@@ -6,6 +6,7 @@ class PostSlide(BaseModel):
   code: str
   compiled_data: str
   thumbnail: str
+  title: str
 
   class Config:
     orm_mode = True
@@ -15,6 +16,7 @@ class PutSlide(BaseModel):
   code: str
   compiled_data: str
   thumbnail: str
+  title: str
   
   class Config:
     orm_mode = True
@@ -25,6 +27,7 @@ class Slide(BaseModel):
   code: str
   compiled_data: str
   thumbnail: str
+  title: str
   created_at: datetime
   updated_at: datetime
 

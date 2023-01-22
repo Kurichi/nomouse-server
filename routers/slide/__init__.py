@@ -22,12 +22,12 @@ async def get_slide(slide_id: str = '', db: Session = Depends(get_db), user: Use
 
 @slides.post('/', response_model=Slide)
 async def post_slide(payload: PostSlide, db: Session = Depends(get_db), user: UserId = Depends(GetCurrentUser())):
-  result = create_slide_handler(db, user.google_uid, payload.code, payload.compiled_data, payload.thumbnail)
+  result = create_slide_handler(db, user.google_uid, payload.code, payload.compiled_data, payload.thumbnail, payload.title)
   return result
 
 @slides.put('/', response_model=Slide)
 async def change_user(payload: PutSlide, db: Session = Depends(get_db), user: UserId = Depends(GetCurrentUser())):
-  result = change_slide_handler(db, user.google_uid, payload.slide_id, payload.code, payload.compiled_data, payload.thumbnail)
+  result = change_slide_handler(db, user.google_uid, payload.slide_id, payload.code, payload.compiled_data, payload.thumbnail, payload.title)
   return result
 
 @slides.delete('/', response_model=DeleteStatus)

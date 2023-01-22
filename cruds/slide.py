@@ -7,7 +7,7 @@ from pydantic import Json
 import json
 
 
-def create_slide_handler(db: Session, google_uid:str, code: str, compiled_data: list[Json[any]], thumbnail: str) -> Slide:
+def create_slide_handler(db: Session, google_uid:str, code: str, compiled_data: list[Json[any]], thumbnail: str, title:str) -> Slide:
   if google_uid == '':
     raise HTTPException(status_code=400, detail="No auth")
 
@@ -15,7 +15,8 @@ def create_slide_handler(db: Session, google_uid:str, code: str, compiled_data: 
     google_uid=google_uid,
     code=code,
     compiled_data=compiled_data,
-    thumbnail=thumbnail
+    thumbnail=thumbnail,
+    title=title
   )
   db.add(slide_orm)
   db.commit()
@@ -26,7 +27,7 @@ def create_slide_handler(db: Session, google_uid:str, code: str, compiled_data: 
   return slide
 
 
-def change_slide_handler(db: Session, google_uid:str, slide_id: str, code: str, compiled_data: list[Json[any]], thumbnail: str) -> Slide:
+def change_slide_handler(db: Session, google_uid:str, slide_id: str, code: str, compiled_data: list[Json[any]], thumbnail: str, title:str) -> Slide:
   if google_uid == '':
     raise HTTPException(status_code=400, detail="No auth")
 
@@ -40,6 +41,7 @@ def change_slide_handler(db: Session, google_uid:str, slide_id: str, code: str, 
   slide_orm.code = slide_orm.code if code is None else code
   slide_orm.compiled_data = slide_orm.compiled_data if compiled_data is None else compiled_data
   slide_orm.thumbnail = slide_orm.thumbnail if thumbnail is None else thumbnail
+  slide_orm.title = slide_orm.title if title is None else title
 
   db.commit()
   db.refresh(slide_orm)
